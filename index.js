@@ -74,7 +74,7 @@ restService.post("/echo", function(req, res) {
       speech =
         '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
       break;
-    case "today date"|| :
+    case "today date" || "date":
        var date = new Date().now();
       speech =
         '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1"> ' + date + ' </say-as></speak>';
