@@ -75,14 +75,24 @@ restService.post("/echo", function(req, res) {
         '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
       break;
     case "date":
-       var date = new Date().now();
+      var datetime = new Date();
       speech =
-        '<speak>Today is ' + date + '</speak>';
+        '<speak>Today is ' + datetime.toISOString().slice(0,10) + '</speak>';
       break;
     case "time":
+        var date = new Date();
+        var year = date.getUTCFullYear();
+        var month = date.getUTCMonth();
+        var day = date.getUTCDate();
+        var hours = date.getUTCHours();
+        var min = date.getUTCMinutes();
+        var sec = date.getUTCSeconds();
+
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = ((hours + 11) % 12 + 1);
         var time = new Date().getTime();
       speech =
-        '<speak>It is' + time + 'now</speak>';
+        '<speak>It is' + hours + ' : ' + min + '-' + ampm + ' now</speak>';
       break;
     case "telephone one":
       speech =
