@@ -64,7 +64,7 @@ restService.post("/echo", function(req, res) {
       break;
     case "bleep":
       speech =
-        '<speak>I do not want to say <say-as interpret-as="bleep">F&%$#</say-as> word</speak>';
+        '<speak>I do not want to say <say-as interpret-as="bleep">F***</say-as> word</speak>';
       break;
     case "unit":
       speech =
@@ -74,21 +74,15 @@ restService.post("/echo", function(req, res) {
       speech =
         '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
       break;
-    case "date one":
+    case "today date"|| :
+       var date = new Date().now();
       speech =
-        '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1">2017-12-16</say-as></speak>';
-      break;
-    case "date two":
-      speech =
-        '<speak>Today is <say-as interpret-as="date" format="dm" detail="1">16-12</say-as></speak>';
-      break;
-    case "date three":
-      speech =
-        '<speak>Today is <say-as interpret-as="date" format="dmy" detail="1">16-12-2017</say-as></speak>';
+        '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1"> ' + date + ' </say-as></speak>';
       break;
     case "time":
+        var time = new Date().getTime();
       speech =
-        '<speak>It is <say-as interpret-as="time" format="hms12">2:30pm</say-as> now</speak>';
+        '<speak>It is <say-as interpret-as="time" format="hms12">' + time + '</say-as> now</speak>';
       break;
     case "telephone one":
       speech =
