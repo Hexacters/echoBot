@@ -77,7 +77,7 @@ restService.post("/echo", function(req, res) {
     case "date":
        var date = new Date().now();
       speech =
-        '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1"> ' + date + ' </say-as></speak>';
+        '<speak>Today is ' + date + '</speak>';
       break;
     case "time":
         var time = new Date().getTime();
