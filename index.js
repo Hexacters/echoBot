@@ -40,7 +40,7 @@ restService.post("/echo", function(req, res) {
       break;
     case "music five":
       speech =
-        '<audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio>';
+        '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>';
       break;
     case "delay":
       speech =
