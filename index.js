@@ -88,24 +88,15 @@ restService.post("/echo", function(req, res) {
         var min = date.getUTCMinutes();
         var sec = date.getUTCSeconds();
 
-        var ampm = hours >= 12 ? 'pm' : 'am';
+        var ampm = hours >= 12 ? 'PM' : 'AM';
         hours = ((hours + 11) % 12 + 1);
         var time = new Date().getTime();
       speech =
-        '<speak>It is' + hours + ' : ' + min + '-' + ampm + ' now</speak>';
+        '<speak>It is ' + hours + ':' + min + ' ' + ampm + ' now</speak>';
       break;
     case "telephone one":
       speech =
         '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
-      break;
-    case "telephone two":
-      speech =
-        '<speak><say-as interpret-as="telephone" format="1">(781) 771-7777</say-as> </speak>';
-      break;
-    // https://www.w3.org/TR/2005/NOTE-ssml-sayas-20050526/#S3.3
-    case "alternate":
-      speech =
-        '<speak>IPL stands for <sub alias="indian premier league">IPL</sub></speak>';
       break;
   }
   return res.json({
