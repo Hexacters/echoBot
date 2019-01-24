@@ -32,37 +32,7 @@ restService.post("/echo", function(req, res) {
 
 
 
-    https.get(url + params, (responseFromAPI) => {
-        let completeResponse = '';
-        responseFromAPI.on('data', (chunk) => {
-            completeResponse += chunk;
-        });
-        responseFromAPI.on('end', () => {
-            const dataa = JSON.parse(completeResponse);
-            speech = dataa.text;
-            return res.json({
-                 fulfillmentText:speech,
-                 fulfillmentMessages:[
-                    {
-                        text: {
-                            text: [
-                               speech
-                            ]
-                        }
-                    }
-                ],
-                source:"Copy Cat"
-            });
-        });
-    }, (error) => {
-        return res.json({
-            speech: 'Something went wrong!',
-            displayText: 'Something went wrong!',
-            source: 'get-movie-details'
-        });
-    });
-
-
+  
   } else {
           
         
