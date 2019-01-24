@@ -26,20 +26,7 @@ restService.post("/echo", function(req, res) {
         path: '/api/v1.5/tr.json/translate?key=trnsl.1.1.20190121T114853Z.bb13b14c2fb8537f.ff83b8ea03a6c04e712181d5152536e30d16c5f5&text='+speech+'&lang=ta'
     };
 
-    if(speech == "tamil") {
-      callback = function(response) {
-        var str = ''
-        response.on('data', function (chunk) {
-          str += chunk;
-        });
-
-        response.on('end', function () {
-          speech = str.text;
-        });
-      }
-    }
-  
-    var req = https.request(options, callback).end();
+    
     switch (speech) {
     //Speech Synthesis Markup Language 
     case "music one":
