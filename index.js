@@ -3,7 +3,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const get = require('simple-get');
-
+var http = require('http');
+var https = require('https');
+const unirest = require('unirest');
 
 const restService = express();
 
@@ -15,26 +17,84 @@ restService.use(
 
 restService.use(bodyParser.json());
 
+restService.post('/get-movie-details', (req, res) => {
+
+    const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
+    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
+    http.get(reqUrl, (responseFromAPI) => {
+        let completeResponse = '';
+        responseFromAPI.on('data', (chunk) => {
+            completeResponse += chunk;
+        });
+        responseFromAPI.on('end', () => {
+            const movie = JSON.parse(completeResponse);
+            let dataToSend = movieToSearch === 'The Godfather' ? `I don't have the required info on that. Here's some info on 'The Godfather' instead.\n` : '';
+            dataToSend += `${movie.Title} is a ${movie.Actors} starer ${movie.Genre} movie, released in ${movie.Year}. It was directed by ${movie.Director}`;
+
+            return res.json({
+                speech: dataToSend,
+                displayText: dataToSend,
+                source: 'get-movie-details'
+            });
+        });
+    }, (error) => {
+        return res.json({
+            speech: 'Something went wrong!',
+            displayText: 'Something went wrong!',
+            source: 'get-movie-details'
+        });
+    });
+});
+
 restService.post("/echo", function(req, res) {
-  var speech =
-    req.body.queryResult &&
-    req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.echoText
-      ? req.body.queryResult.parameters.echoText
-      : "Seems like some problem. Speak again.";
+  console.log(req.body);
+  var speech = req.body.tr ? req.body.tr : "Seems like some problem. Speak again.";
 
         var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
         var params = "key=trnsl.1.1.20190121T114853Z.bb13b14c2fb8537f.ff83b8ea03a6c04e712181d5152536e30d16c5f5&text=" + speech + "&lang=ta"
-        get(url + params, function (err, res) {
-          if (err) throw err
 
-          res.on('data', function (chunk) {
-           speech = chunk;
-            
-          });
-        });
 
     
+
+        if (speech == "tamil") {
+
+
+
+    https.get(url + params, (responseFromAPI) => {
+        let completeResponse = '';
+        responseFromAPI.on('data', (chunk) => {
+            completeResponse += chunk;
+        });
+        responseFromAPI.on('end', () => {
+            const dataa = JSON.parse(completeResponse);
+            speech = dataa.text;
+            return res.json({
+                 fulfillmentText:speech,
+                 fulfillmentMessages:[
+                    {
+                        text: {
+                            text: [
+                               speech
+                            ]
+                        }
+                    }
+                ],
+                source:"Copy Cat"
+            });
+        });
+    }, (error) => {
+        return res.json({
+            speech: 'Something went wrong!',
+            displayText: 'Something went wrong!',
+            source: 'get-movie-details'
+        });
+    });
+
+
+  } else {
+          
+        
+
     switch (speech) {
     //Speech Synthesis Markup Language 
     case "music one":
@@ -114,7 +174,8 @@ restService.post("/echo", function(req, res) {
         '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
       break;
   }
-   return res.json({
+
+return res.json({
      fulfillmentText:speech,
      fulfillmentMessages:[
         {
@@ -128,6 +189,12 @@ restService.post("/echo", function(req, res) {
     source:"Copy Cat"
   });
  
+
+  }
+
+
+   
+  
 });
 
 restService.post("/audio", function(req, res) {
