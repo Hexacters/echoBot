@@ -164,7 +164,19 @@ return res.json({
 
   }
 
-
+return res.json({
+                 fulfillmentText:speech,
+                 fulfillmentMessages:[
+                    {
+                        text: {
+                            text: [
+                               speech
+                            ]
+                        }
+                    }
+                ],
+                source:"Copy Cat"
+            });
    
   
 });
