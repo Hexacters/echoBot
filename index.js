@@ -30,19 +30,7 @@ restService.post("/echo", function(req, res) {
 
           res.on('data', function (chunk) {
            speech = chunk;
-             return res.json({
-     fulfillmentText:speech,
-     fulfillmentMessages:[
-        {
-            text: {
-                text: [
-                   speech
-                ]
-            }
-        }
-    ],
-    source:"Copy Cat"
-  });
+            
           });
         });
 
@@ -126,6 +114,19 @@ restService.post("/echo", function(req, res) {
         '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
       break;
   }
+   return res.json({
+     fulfillmentText:speech,
+     fulfillmentMessages:[
+        {
+            text: {
+                text: [
+                   speech
+                ]
+            }
+        }
+    ],
+    source:"Copy Cat"
+  });
  
 });
 
