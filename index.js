@@ -2,6 +2,9 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const get = require('simple-get');
+
+
 const restService = express();
 
 restService.use(
