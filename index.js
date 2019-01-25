@@ -2,8 +2,9 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-var http = require('http');
-var https = require('https');
+const http = require('http');
+const https = require('https');
+const port = process.env.PORT || 8000;
 
 const restService = express();
 
@@ -13,18 +14,20 @@ restService.use(
   })
 );
 
+var tokens = {
+  translate : "trnsl.1.1.20190121T114853Z.bb13b14c2fb8537f.ff83b8ea03a6c04e712181d5152536e30d16c5f5"
+}
+
 restService.use(bodyParser.json());
 
-
 restService.post("/echo", function(req, res) {
-  console.log(req.body);
- var speech =
-    req.body.queryResult &&
-    req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.echoText
-      ? req.body.queryResult.parameters.echoText
-      : "Seems like some problem. Speak again.";;
-
+  //var speech = req.body.tr ? req.body.tr.toLowerCase() : "Seems like some problem. Speak again.";
+  var speech =
+      req.body.queryResult &&
+      req.body.queryResult.parameters &&
+      req.body.queryResult.parameters.echoText
+        ? req.body.queryResult.parameters.echoText
+        : "Seems like some problem. Speak again.";
   let translateArray = ["translate", "say"];
   let conjectionArray = ["in"];
   if (translateArray.some(substring=>speech.includes(substring)) && conjectionArray.some(substring=>speech.includes(substring))) {
@@ -134,107 +137,6 @@ restService.post("/echo", function(req, res) {
         ],
         source:"Copy Cat"
       });
-  }
-
-  } else {
-          
-        
-
-    switch (speech) {
-    //Speech Synthesis Markup Language 
-    case "music one":
-      speech =
-        '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music two":
-      speech =
-        '<speak><audio clipBegin="1s" clipEnd="3s" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music three":
-      speech =
-        '<speak><audio repeatCount="2" soundLevel="-15db" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music four":
-      speech =
-        '<speak><audio speed="200%" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music five":
-      speech =
-        '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>';
-      break;
-    case "delay":
-      speech =
-        '<speak>Let me take a break for 3 seconds. <break time="3s"/> I am back again.</speak>';
-      break;
-    //https://www.w3.org/TR/speech-synthesis/#S3.2.3
-    case "cardinal":
-      speech = '<speak><say-as interpret-as="cardinal">12345</say-as></speak>';
-      break;
-    case "ordinal":
-      speech =
-        '<speak>I stood <say-as interpret-as="ordinal">10</say-as> in the class exams.</speak>';
-      break;
-    case "characters":
-      speech =
-        '<speak>Hello is spelled as <say-as interpret-as="characters">Hello</say-as></speak>';
-      break;
-    case "fraction":
-      speech =
-        '<speak>Rather than saying 24+3/4, I should say <say-as interpret-as="fraction">24+3/4</say-as></speak>';
-      break;
-    case "bleep":
-      speech =
-        '<speak>I do not want to say <say-as interpret-as="bleep">F***</say-as> word</speak>';
-      break;
-    case "unit":
-      speech =
-        '<speak>This road is <say-as interpret-as="unit">50 foot</say-as> wide</speak>';
-      break;
-    case "verbatim":
-      speech =
-        '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
-      break;
-    case "date":
-      var datetime = new Date();
-      speech =
-        '<speak>Today is ' + datetime.toISOString().slice(0,10) + '</speak>';
-      break;
-    case "time":
-        var date = new Date();
-        var year = date.getUTCFullYear();
-        var month = date.getUTCMonth();
-        var day = date.getUTCDate();
-        var hours = date.getUTCHours();
-        var min = date.getUTCMinutes();
-        var sec = date.getUTCSeconds();
-
-        var ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = ((hours + 11) % 12 + 1);
-        var time = new Date().getTime();
-      speech =
-        '<speak>It is ' + hours + ':' + min + ' ' + ampm + ' now</speak>';
-      break;
-    case "telephone one":
-      speech =
-        '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
-      break;
-  }
-
-return res.json({
-     fulfillmentText:speech,
-     fulfillmentMessages:[
-        {
-            text: {
-                text: [
-                   speech
-                ]
-            }
-        }
-    ],
-    source:"Copy Cat"
-  });
- 
-
   }
 
 
@@ -410,7 +312,6 @@ restService.post("/slack-test", function(req, res) {
   });
 });
 
-const port = process.env.PORT || 8000;
 restService.listen(port, function() {
   console.log("Server up and listening");
 });
