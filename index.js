@@ -18,7 +18,12 @@ restService.use(bodyParser.json());
 
 restService.post("/echo", function(req, res) {
   console.log(req.body);
-  var speech = req.body.tr ? req.body.tr : "Seems like some problem. Speak again.";
+ var speech =
+    req.body.queryResult &&
+    req.body.queryResult.parameters &&
+    req.body.queryResult.parameters.echoText
+      ? req.body.queryResult.parameters.echoText
+      : "Seems like some problem. Speak again.";;
 
         var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
         var params = "key=trnsl.1.1.20190121T114853Z.bb13b14c2fb8537f.ff83b8ea03a6c04e712181d5152536e30d16c5f5&text=" + speech + "&lang=ta"
