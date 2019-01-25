@@ -25,46 +25,116 @@ restService.post("/echo", function(req, res) {
       ? req.body.queryResult.parameters.echoText
       : "Seems like some problem. Speak again.";;
 
-        var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
-        var params = "key=trnsl.1.1.20190121T114853Z.bb13b14c2fb8537f.ff83b8ea03a6c04e712181d5152536e30d16c5f5&text=" + speech + "&lang=ta"
+  let translateArray = ["translate", "say"];
+  let conjectionArray = ["in"];
+  if (translateArray.some(substring=>speech.includes(substring)) && conjectionArray.some(substring=>speech.includes(substring))) {
 
-
-    
-
-        if (speech == "tamil") {
-
-
-
-    https.get(url + params, (responseFromAPI) => {
-        let completeResponse = '';
-        responseFromAPI.on('data', (chunk) => {
-            completeResponse += chunk;
-        });
-        responseFromAPI.on('end', () => {
-            const dataa = JSON.parse(completeResponse);
-            speech = dataa.text;
-            return res.json({
-                 fulfillmentText:speech,
-                 fulfillmentMessages:[
-                    {
-                        text: {
-                            text: [
-                               speech
-                            ]
-                        }
-                    }
-                ],
-                source:"Copy Cat"
-            });
-        });
-    }, (error) => {
-        return res.json({
-            speech: 'Something went wrong!',
-            displayText: 'Something went wrong!',
-            source: 'get-movie-details'
-        });
+    var lang = '';
+    conjectionArray.some(substring=> {
+      if(speech.includes(substring)){
+         var l = speech.lastIndexOf(substring);
+         lang = speech.substring(l).replace(substring, '').trim();
+         speech = speech.replace(speech.substring(l), '').trim();
+      }
+    });
+    translateArray.some(substring=>{
+      speech = speech.replace(substring, '');
     });
 
+    speech = speech.replace(lang, '').trim();
+
+    //get Language Code
+    var url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?"
+    var params = "key=" +tokens.translate + "&ui=en"
+    https.get(url + params, (responseFromAPI) => {
+      let completeResponse = '';
+      responseFromAPI.on('data', (chunk) => {
+          completeResponse += chunk;
+      });
+      responseFromAPI.on('end', () => {
+        const langC = JSON.parse(completeResponse);
+        var langCodes = langC.langs;
+        var langCode = '';
+          for(var key in langCodes){
+            if (langCodes[key].toLowerCase() === lang.toLowerCase()) {
+              langCode = key;
+            }
+          }
+
+          //Translate Process
+          url = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
+          params = "key=" +tokens.translate + " &text=" + speech + "&lang=" + langCode
+          https.get(url + params, (responseFromAPI) => {
+            let completeResponse = '';
+            responseFromAPI.on('data', (chunk) => {
+                completeResponse += chunk;
+            });
+            responseFromAPI.on('end', () => {
+              const dataa = JSON.parse(completeResponse);
+              speech = dataa.text;
+              if (!dataa) {
+                speech = "Sorry I cant Understand Your Translate Language";
+              }
+              return res.json({
+                  fulfillmentText:speech,
+                  fulfillmentMessages:[
+                    {
+                      text: {
+                          text: [
+                             speech
+                          ]
+                      }
+                    }
+                  ],
+                  source:"Copy Cat"
+              });
+            });
+          }, (error) => {
+            return null;
+          });
+      });
+    }, (error) => {
+      return null;
+    });
+
+  } else {
+      switch (speech) {
+      //Speech Synthesis Markup Language 
+      case "date":
+        var datetime = new Date();
+        speech =
+          '<speak>Today is ' + datetime.toISOString().slice(0,10) + '</speak>';
+        break;
+      case "time":
+          var date = new Date();
+          var year = date.getUTCFullYear();
+          var month = date.getUTCMonth();
+          var day = date.getUTCDate();
+          var hours = date.getUTCHours();
+          var min = date.getUTCMinutes();
+          var sec = date.getUTCSeconds();
+          var ampm = hours >= 12 ? 'PM' : 'AM';
+          hours = ((hours + 11) % 12 + 1);
+          var time = new Date().getTime();
+        speech =
+          '<speak>It is ' + hours + ':' + min + ' ' + ampm + ' now</speak>';
+        break;
+      }
+
+      return res.json({
+         fulfillmentText:speech,
+         fulfillmentMessages:[
+            {
+                text: {
+                    text: [
+                       speech
+                    ]
+                }
+            }
+        ],
+        source:"Copy Cat"
+      });
+  }
 
   } else {
           
