@@ -32,7 +32,37 @@ restService.post("/echo", function(req, res) {
 
 
 
-  
+    https.get(url + params, (responseFromAPI) => {
+        let completeResponse = '';
+        responseFromAPI.on('data', (chunk) => {
+            completeResponse += chunk;
+        });
+        responseFromAPI.on('end', () => {
+            const dataa = JSON.parse(completeResponse);
+            speech = dataa.text;
+            return res.json({
+                 fulfillmentText:speech,
+                 fulfillmentMessages:[
+                    {
+                        text: {
+                            text: [
+                               speech
+                            ]
+                        }
+                    }
+                ],
+                source:"Copy Cat"
+            });
+        });
+    }, (error) => {
+        return res.json({
+            speech: 'Something went wrong!',
+            displayText: 'Something went wrong!',
+            source: 'get-movie-details'
+        });
+    });
+
+
   } else {
           
         
@@ -134,19 +164,7 @@ return res.json({
 
   }
 
-return res.json({
-                 fulfillmentText:speech,
-                 fulfillmentMessages:[
-                    {
-                        text: {
-                            text: [
-                               speech
-                            ]
-                        }
-                    }
-                ],
-                source:"Copy Cat"
-            });
+
    
   
 });
@@ -319,6 +337,7 @@ restService.post("/slack-test", function(req, res) {
   });
 });
 
-restService.listen(process.env.PORT || 8000, function() {
+const port = process.env.PORT || 8000;
+restService.listen(port, function() {
   console.log("Server up and listening");
 });
