@@ -2,10 +2,8 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const get = require('simple-get');
 var http = require('http');
 var https = require('https');
-const unirest = require('unirest');
 
 const restService = express();
 
