@@ -104,10 +104,14 @@ restService.post("/echo", function(req, res) {
       case "about you":
       case "status":
         if (req.body.originalDetectIntentRequest.source) {
+          var group = "Private chat"
+          if( req.body.originalDetectIntentRequest.payload.data.user.name.address.conversation && req.body.originalDetectIntentRequest.payload.data.user.name.address.conversation.isGroup) {
+              group = "Group Chat"
+          }
         speech = 
           'Haii ' + req.body.originalDetectIntentRequest.payload.data.user.name + '..! :) \n' +
           'Now i am in ' + req.body.originalDetectIntentRequest.source + '\n' +
-          'We are Talking in ' + 'Persnal Chat';
+          'We are Talking in ' + group;
         } else {
           speech = 'I am online Now';
         }
