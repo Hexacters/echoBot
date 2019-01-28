@@ -22,7 +22,7 @@ restService.use(bodyParser.json());
 
 restService.post("/echo", function(req, res) {
   //var speech = req.body.tr ? req.body.tr.toLowerCase() : "Seems like some problem. Speak again.";
-  console.log(req.body);
+  console.log(req.body.originalDetectIntentRequest.payload.data);
   var speech =
       req.body.queryResult &&
       req.body.queryResult.parameters &&
