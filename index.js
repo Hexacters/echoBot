@@ -80,13 +80,13 @@ restService.post("/echo", function(req, res) {
           '<speak>Today is ' + datetime.toISOString().slice(0,10) + '</speak>';
         break;
       case "time":
-          var date = new Date();
-          var year = date.getUTCFullYear();
-          var month = date.getUTCMonth();
-          var day = date.getUTCDate();
-          var hours = date.getUTCHours();
-          var min = date.getUTCMinutes();
-          var sec = date.getUTCSeconds();
+          var currentTime = new Date();
+          var currentOffset = currentTime.getTimezoneOffset();
+          var ISTOffset = 330;   // IST offset UTC +5:30 
+          var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+          // ISTTime now represents the time in IST coordinates
+          var hours = ISTTime.getHours();
+          var min = ISTTime.getMinutes();
           var ampm = hours >= 12 ? 'PM' : 'AM';
           hours = ((hours + 11) % 12 + 1);
           var time = new Date().getTime();
