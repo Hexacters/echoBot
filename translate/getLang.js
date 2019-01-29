@@ -7,7 +7,7 @@ var translateLang = require('./translateLang');
 function getLang (lang, speech, tokens) {
 	var url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?"
 	var params = "key=" +tokens.translate + "&ui=en"
-
+	console.log("---", speech);
 	var options = {
         url: url+params
     };
