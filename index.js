@@ -34,7 +34,7 @@ restService.post("/echo", function(req, res) {
     var l = speech.lastIndexOf('in');
     speech.echoText = speech.replace(speech.substring(l), '').trim();
     //Translate
-    translate(lang, speech).then(function(speech){
+    translate(lang, speech.echoText).then(function(speech){
       if (!speech) {
         speech = "Sorry! i can't Understand!.. :("
       }
@@ -87,9 +87,13 @@ restService.post("/echo", function(req, res) {
       case "hello":
       case "haii":
       case "hi":
-        var userData = req.body.originalDetectIntentRequest.payload;
-        speech =
-          'Haii ' + (!!userData ? userData.data.user.name : '') + '...! :)';
+        if(req.body.originalDetectIntentRequest.payload.user){
+           speech =
+          'Haii ' + req.body.originalDetectIntentRequest.payload.data.user.name + '...! :)';
+        }else {
+             speech = 'Haii ...! :)';
+        }
+       
         break;
 
       case "about you":
