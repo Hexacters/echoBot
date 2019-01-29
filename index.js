@@ -29,9 +29,9 @@ restService.post("/echo", function(req, res) {
   var element = '';
   let conjectionArray = ["in"];
   if ( speech.tranCut && speech.lang ) {
-
+    console.log(speech);
     var lang = speech.lang;
-    speech = speech.echoText.replace('Hexa', '');
+    speech = speech.echoText;
     var l = speech.lastIndexOf('in');
     speech = speech.replace(speech.substring(l), '').trim();
     //Translate
