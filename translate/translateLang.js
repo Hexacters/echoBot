@@ -8,7 +8,7 @@ function translateLang (langCode, speech, tokens) {
 	//Translate Process
 	var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
 	var params = "key=" +tokens.translate + " &text=" + speech + "&lang=" + langCode
-	
+	console.log(speech, '--------' , langCode);
 	var options = {
         url: url+params
     };
