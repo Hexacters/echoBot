@@ -98,9 +98,9 @@ restService.post("/echo", function(req, res) {
       case "hello":
       case "haii":
       case "hi":
-        var userData = req.body.originalDetectIntentRequest.payload.data.user;
+        var userData = req.body.originalDetectIntentRequest.payload;
         speech =
-          'Haii ' + userData ? userData.name : '' + '...! :)';
+          'Haii ' + userData ? userData.data.user.name : '' + '...! :)';
         break;
 
       case "about you":
