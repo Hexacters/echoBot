@@ -23,28 +23,16 @@ restService.post("/echo", function(req, res) {
        req.body.queryResult &&
        req.body.queryResult.parameters &&
        req.body.queryResult.parameters.echoText
-         ? req.body.queryResult.parameters.echoText
+         ? req.body.queryResult.parameters
          : "Seems like some problem. Speak again.";
 
   var element = '';
-  let translateArray = ["translate", "say"];
   let conjectionArray = ["in"];
-  if (translateArray.some(substring=>speech.includes(substring)) && conjectionArray.some(substring=>speech.includes(substring))) {
+  if ( speech.speech && speech.lang ) {
 
-    var lang = '';
-    conjectionArray.some(substring=> {
-      if(speech.includes(substring)){
-         var l = speech.lastIndexOf(substring);
-         lang = speech.substring(l).replace(substring, '').trim();
-         speech = speech.replace(speech.substring(l), '').trim();
-      }
-    });
-    translateArray.some(substring=>{
-      speech = speech.replace(substring, '');
-    });
-
-    speech = speech.replace(lang, '').trim();
-    console.log(lang, speech);
+    var lang = speech.lang;
+    var l = speech.lastIndexOf('in');
+    speech.echoText = speech.replace(speech.substring(l), '').trim();
     //Translate
     translate(lang, speech).then(function(speech){
       if (!speech) {
@@ -66,8 +54,9 @@ restService.post("/echo", function(req, res) {
     });
     
   } else {
+    speech = speech.echoText + '';
       defaultValues.map(s => {
-        if (speech.includes(s)) {
+        if (speech.echoText.includes(s)) {
           element = s;
         }
       });
