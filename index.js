@@ -112,9 +112,6 @@ restService.post("/echo", function(req, res) {
         speech = 
           'I am doing Well what About You';
         break;
-      case "Hexa":
-        speech = 'Hello i am Hexa';
-        break;
       }
 
       return res.json({
