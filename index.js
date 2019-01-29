@@ -33,7 +33,10 @@ restService.post("/echo", function(req, res) {
     var lang = speech.lang;
     speech = speech.echoText;
     var l = speech.lastIndexOf('in');
-    speech = speech.replace(speech.substring(l), '').trim();
+    if (l>0) {
+      
+      speech = speech.replace(speech.substring(l), '').trim();
+    }
     //Translate
     translate(lang, speech).then(function(speech){
       if (!speech) {
