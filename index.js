@@ -31,7 +31,7 @@ restService.post("/echo", function(req, res) {
   if ( speech.tranCut && speech.lang ) {
 
     var lang = speech.lang;
-    speech = speech.echoText;
+    speech = speech.echoText.replace('Hexa', '');
     var l = speech.lastIndexOf('in');
     speech = speech.replace(speech.substring(l), '').trim();
     //Translate
@@ -111,6 +111,9 @@ restService.post("/echo", function(req, res) {
       case "doing":
         speech = 
           'I am doing Well what About You';
+        break;
+      case "Hexa":
+        speech = 'Hello i am Hexa';
         break;
       }
 
