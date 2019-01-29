@@ -31,10 +31,11 @@ restService.post("/echo", function(req, res) {
   if ( speech.tranCut && speech.lang ) {
 
     var lang = speech.lang;
+    speech = speech.echoText;
     var l = speech.lastIndexOf('in');
     speech.echoText = speech.replace(speech.substring(l), '').trim();
     //Translate
-    translate(lang, speech.echoText).then(function(speech){
+    translate(lang, speech).then(function(speech){
       if (!speech) {
         speech = "Sorry! i can't Understand!.. :("
       }
