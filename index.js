@@ -28,7 +28,7 @@ restService.post("/echo", function(req, res) {
 
   var element = '';
   let conjectionArray = ["in"];
-  if ( speech.speech && speech.lang ) {
+  if ( speech.tranCut && speech.lang ) {
 
     var lang = speech.lang;
     var l = speech.lastIndexOf('in');
@@ -56,7 +56,7 @@ restService.post("/echo", function(req, res) {
   } else {
     speech = speech.echoText + '';
       defaultValues.map(s => {
-        if (speech.echoText.includes(s)) {
+        if (speech.includes(s)) {
           element = s;
         }
       });
